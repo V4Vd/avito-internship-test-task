@@ -1,0 +1,179 @@
+{
+  "info": {
+    "name": "PR Reviewer Service",
+    "description": "API tests for PR Reviewer Assignment Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Teams",
+      "item": [
+        {
+          "name": "Create Team",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"team_name\": \"backend\",\n  \"members\": [\n    {\n      \"user_id\": \"u1\",\n      \"username\": \"Alice\",\n      \"is_active\": true\n    },\n    {\n      \"user_id\": \"u2\",\n      \"username\": \"Bob\",\n      \"is_active\": true\n    },\n    {\n      \"user_id\": \"u3\",\n      \"username\": \"Charlie\",\n      \"is_active\": true\n    }\n  ]\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/team/add",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["team", "add"]
+            }
+          }
+        },
+        {
+          "name": "Get Team",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/team/get?team_name=backend",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["team", "get"],
+              "query": [
+                {
+                  "key": "team_name",
+                  "value": "backend"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Users",
+      "item": [
+        {
+          "name": "Set User Active Status",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"user_id\": \"u2\",\n  \"is_active\": false\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/users/setIsActive",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "setIsActive"]
+            }
+          }
+        },
+        {
+          "name": "Get User Reviews",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/users/getReview?user_id=u2",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["users", "getReview"],
+              "query": [
+                {
+                  "key": "user_id",
+                  "value": "u2"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Pull Requests",
+      "item": [
+        {
+          "name": "Create PR",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pull_request_id\": \"pr-1001\",\n  \"pull_request_name\": \"Add search feature\",\n  \"author_id\": \"u1\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/pullRequest/create",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["pullRequest", "create"]
+            }
+          }
+        },
+        {
+          "name": "Merge PR",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pull_request_id\": \"pr-1001\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/pullRequest/merge",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["pullRequest", "merge"]
+            }
+          }
+        },
+        {
+          "name": "Reassign Reviewer",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pull_request_id\": \"pr-1001\",\n  \"old_user_id\": \"u2\"\n}"
+            },
+            "url": {
+              "raw": "http://localhost:8080/pullRequest/reassign",
+              "protocol": "http",
+              "host": ["localhost"],
+              "port": "8080",
+              "path": ["pullRequest", "reassign"]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
