@@ -57,8 +57,7 @@ func TestMain(m *testing.M) {
 
 	code := m.Run()
 
-	// can't use defer here
-	testDB.Close()
+	testDB.Close() // can't use defer here
 
 	os.Exit(code)
 }
@@ -176,7 +175,7 @@ func TestTeamAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusBadRequest {
-			t.Errorf("Expected status 400, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 400, got %d: %s", w.Code, w.Body.String())
 		}
 	})
 }
@@ -212,7 +211,7 @@ func TestUserAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("Expected status 200, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 200, got %d: %s", w.Code, w.Body.String())
 		}
 	})
 
@@ -233,14 +232,14 @@ func TestUserAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("Expected status 200, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 200, got %d: %s", w.Code, w.Body.String())
 		}
 
 		var response map[string]any
 		json.Unmarshal(w.Body.Bytes(), &response)
 
 		if prs, ok := response["pull_requests"].([]any); !ok || len(prs) != 0 {
-			t.Errorf("Expected empty pull_requests array, got %v", response["pull_requests"])
+			t.Errorf("expected empty pull_requests array, got %v", response["pull_requests"])
 		}
 	})
 }
@@ -280,7 +279,7 @@ func TestPullRequestAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusCreated {
-			t.Errorf("Expected status 201, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 201, got %d: %s", w.Code, w.Body.String())
 		}
 
 		var response map[string]any
@@ -288,18 +287,18 @@ func TestPullRequestAPI(t *testing.T) {
 
 		prObj := response["pr"]
 		if prObj == nil {
-			t.Fatalf("Expected pr in response, got %v", response)
+			t.Fatalf("expected pr in response, got %v", response)
 		}
 
 		pr := prObj.(map[string]any)
 		assignedReviewers, _ := pr["assigned_reviewers"].([]any)
 
 		if len(assignedReviewers) == 0 {
-			t.Error("Expected at least one reviewer to be assigned")
+			t.Error("expected at least one reviewer to be assigned")
 		}
 
 		if len(assignedReviewers) > 2 {
-			t.Errorf("Expected at most 2 reviewers, got %d", len(assignedReviewers))
+			t.Errorf("expected at most 2 reviewers, got %d", len(assignedReviewers))
 		}
 	})
 
@@ -325,7 +324,7 @@ func TestPullRequestAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("Expected status 200, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 200, got %d: %s", w.Code, w.Body.String())
 		}
 
 		var response map[string]any
@@ -333,7 +332,7 @@ func TestPullRequestAPI(t *testing.T) {
 
 		pr := response["pr"].(map[string]any)
 		if pr["status"] != "MERGED" {
-			t.Errorf("Expected status 'MERGED', got %v", pr["status"])
+			t.Errorf("expected status 'MERGED', got %v", pr["status"])
 		}
 	})
 
@@ -371,7 +370,7 @@ func TestPullRequestAPI(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("Expected status 200, got %d: %s", w.Code, w.Body.String())
+			t.Errorf("expected status 200, got %d: %s", w.Code, w.Body.String())
 		}
 
 		var response map[string]any
@@ -382,7 +381,7 @@ func TestPullRequestAPI(t *testing.T) {
 
 		for _, reviewer := range newReviewers {
 			if reviewer.(string) == oldReviewer {
-				t.Errorf("Old reviewer %s should not be in the list after reassignment", oldReviewer)
+				t.Errorf("old reviewer %s should not be in the list after reassignment", oldReviewer)
 			}
 		}
 	})
@@ -425,7 +424,7 @@ func TestPRIdempotency(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("First merge: Expected status 200, got %d", w.Code)
+			t.Errorf("first merge: expected status 200, got %d", w.Code)
 		}
 
 		body, _ = json.Marshal(mergePayload)
@@ -435,7 +434,7 @@ func TestPRIdempotency(t *testing.T) {
 		testRouter.ServeHTTP(w, req)
 
 		if w.Code != http.StatusOK {
-			t.Errorf("Second merge: Expected status 200, got %d", w.Code)
+			t.Errorf("second merge: expected status 200, got %d", w.Code)
 		}
 
 		var response map[string]any
@@ -443,7 +442,7 @@ func TestPRIdempotency(t *testing.T) {
 
 		pr := response["pr"].(map[string]any)
 		if pr["status"] != "MERGED" {
-			t.Errorf("Expected status 'MERGED', got %v", pr["status"])
+			t.Errorf("expected status 'MERGED', got %v", pr["status"])
 		}
 	})
 }
